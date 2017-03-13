@@ -10,11 +10,17 @@ Linux (may run on PC/Mac though not tested)
 # Getting Started
 Create a project directory and subdirectories on your file system e.g. 
 
-mkdir coloc_1
-cd coloc_1
-mkdir bin raw in out
+mkdir coloc_1; cd coloc_1; mkdir raw in out; 
 
-Each new batch of image files will need its own directory structure. In the bin directory place the Perl and ImageJ (ijm) files. In the raw directory place the image files. These should be named as name/value pairs which will allow you to do comparisons later, so for example:
+git clone the Colocalisation pipeline which will create a directory called Colocalisation:
+
+git clone https://github.com/bioinfbloke/Colocalisation.git
+ 
+now we'll make a symlink to the Colocalisation directory
+
+ln -s Colocalisation bin
+
+Each new batch of image files will need its own directory structure. In the raw directory place the image files. These should be named as name/value pairs which will allow you to do comparisons later, so for example:
 
 DAPI_Blue_53BP1_Green_PML_Red_Sample_1_type_RGB.tif
 
@@ -30,7 +36,7 @@ There are three main stages and to run each stage you should go to the main proj
 
 In the main project directory enter:
 
-perl segment.pl
+perl bin/segment.pl
 
 Before running, you will almost certainly need to edit the function in bin/segment.ijm called at line 21 "SegmentNuclei" depending on the the nuclei you want to segment. This might take some experimentation!
 
@@ -40,7 +46,7 @@ This operation should populate the 'in' directory with segmented out nuclei imag
 
 In the main project directory enter:
 
-perl coloc.pl
+perl bin/coloc.pl
 
 Before running, you may need to edit the command starting line 56 (//auto threshold for red) and line 66 (//auto threshold for green)
 bacuse here you are thesholding the foci so they may analysed by the JaCoP plugin. Again this might take some experimentation to get right initially. This will then analyse all the segmented out images in (1).
@@ -55,12 +61,16 @@ montage.png
 
 To get various stats about how the foci colocalise and generate a table that can be viewed in any spreadsheet package or as part of Zegami collection, in the main project directory enter:
 
-perl table.pl > zegami.tab
+perl bin/table.pl > zegami.tab
 
 This will read all the files in out and then generate zegami.tab
 
 # Notes
 
-When the contents of the 'out' directory is processed by table.pl, as well as the various Distance Based Colocalisation (DBC) and Centre of Mass Colocalisation (CC) measurements, the name/value pairs in the filename will be passed in to the final tab separated output. This allows you to filter items and do comparisons in tools such Zegami (http://zegami.com). For example, you may treat the cells with different levels of drug, so if you name a set of files with drug_1 and then another set of files drug_2 then you will have a column called 'drug' containing 1 or 2 for each row.
+When the contents of the 'out' directory are processed by table.pl, as well as the various Distance Based Colocalisation (DBC) and Centre of Mass Colocalisation (CC) measurements, the name/value pairs in the filename will be passed in to the final tab separated output. 
+This allows you to filter items and do comparisons in tools such Zegami (http://zegami.com). 
+
+As a very simple example, if you were comparing two slides, one slide a wild type, and one slide a knock out. You could name the two images as condition_wt_1.tif and condition_ko_2.tif respectively. 
+When processed by the table.pl command this will give a tab delimited file with a column named "condition" containing 'wt' or 'ko'.
 
 
