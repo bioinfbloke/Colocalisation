@@ -9,6 +9,13 @@ my $row_id=1;
 my $txt_body="";
 my %header_names;
 my $last_file="";
+# this is how many tuples to parse in the filename to create metadata
+# so these may be queried later as part of a facet so for example
+# Condition_WT_TRF2_red_PML_green_1_MergeData.TIF
+# Condition_KO_TRF2_red_PML_green_1_MergeData.TIF
+# would create the metadata Condition WT for the at images relating to Condition_WT_TRF2_red_PML_green_1_MergeData.TIF
+# and Condition KO for the at images relating to Condition_KO_TRF2_red_PML_green_1
+my $number_of_tuples_to_parse = 1;
 
 
 print STDERR "Current directory ".$path."\n";
@@ -52,23 +59,19 @@ while( (my $file = readdir(DIR))){
     
     
     # parses the filenames to get the facets
-    $txt_body.="$row_id\t$full_path\t$id";
-        
+    $txt_body.="$row_id\t$file\t$id"; 
     my @file_name_values=split(/_/,$file);
     my $names_id=0;
-    while (@file_name_values) {
+    while (@file_name_values and $names_id < $number_of_tuples_to_parse) {
     	my $name=shift(@file_name_values);
-	my $value=shift(@file_name_values);
-	
-	if ($name eq "Red" or $value eq "Red" or $name eq "Green" or $value eq "Green") {
-		last;
-	}
-	
+	my $value=shift(@file_name_values);	
 	$txt_body.="\t$value";
 	$header_names{$names_id}=$name;
 	$names_id++;
-    }
+    }    
     
+    
+            
     $txt_body.="\t$num_a_foci\t$num_b_foci\t$mass_colocal_A\t$mass_colocal_B\t$distance_colocal_A\t$distance_colocal_B\n";
     
     # this just takes the final file name that is processed so it can be used outside the loop
