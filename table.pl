@@ -1,5 +1,6 @@
 #!/usr/bin/perl -w
 use strict;
+# You should change this to the path where you put Colocalist.pm
 use lib '/public/staylor/lib/';
 use Colocalise;
 use Cwd;
@@ -84,9 +85,4 @@ foreach my $header_id (sort {$a<=>$b} keys %header_names) {
 }
 
 
-print "id\tpath\timage$header_names\tnumber of red foci\tnumber of green foci\tCC red foci\tCC green foci\tDBC red foci\tDBC green foci\n";
-print $txt_body;
-
-closedir(DIR);
-
-
+print "id\tpath\timage$header_names\tnumber of red foci\tnumber of green foci\tCC red foci\tCC green foci\tDBC
