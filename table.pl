@@ -16,7 +16,7 @@ my $last_file="";
 # Condition_KO_TRF2_red_PML_green_1_MergeData.TIF
 # would create the metadata Condition WT for the at images relating to Condition_WT_TRF2_red_PML_green_1_MergeData.TIF
 # and Condition KO for the at images relating to Condition_KO_TRF2_red_PML_green_1
-my $number_of_tuples_to_parse = 1;
+my $number_of_tuples_to_parse = 0;
 
 
 print STDERR "Current directory ".$path."\n";
@@ -85,4 +85,7 @@ foreach my $header_id (sort {$a<=>$b} keys %header_names) {
 }
 
 
-print "id\tpath\timage$header_names\tnumber of red foci\tnumber of green foci\tCC red foci\tCC green foci\tDBC
+print "id\tpath\timage$header_names\tnumber of red foci\tnumber of green foci\tCC red foci\tCC green foci\tDBC green foci\n";
+print $txt_body;
+
+closedir(DIR);
